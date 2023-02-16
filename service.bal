@@ -3,21 +3,19 @@ import ballerina/http;
 
 configurable string proxyURL = ?;
 configurable string proxyURLPath = ?;
-configurable string basicAuthUN = ?;
-configurable string basicAuthPW = ?;
+configurable string token = ?;
 
 public function main() {
     do {
         http:Client proxyEndpoint = check new (proxyURL,
-        auth = {
-            username: basicAuthUN,
-            password: basicAuthPW
-        },
+        
         secureSocket = {
             enable: false
         });
 
-        json res = check proxyEndpoint->get(proxyURLPath);
+        json res = check proxyEndpoint->get(proxyURLPath, {
+            "Authorization": "Basic " + token
+        });
 
         io:println("success invocation: ", res);
     } on fail var e {
