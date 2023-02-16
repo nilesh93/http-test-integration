@@ -6,7 +6,10 @@ configurable string proxyURLPath = ?;
 
 public function main() {
     do {
-        http:Client proxyEndpoint = check new (proxyURL);
+        http:Client proxyEndpoint = check new (proxyURL, secureSocket = {
+            enable: false
+        });
+
         json res = check proxyEndpoint->get(proxyURLPath);
 
         io:println("success invocation: ", res);
