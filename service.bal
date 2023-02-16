@@ -3,10 +3,17 @@ import ballerina/http;
 
 configurable string proxyURL = ?;
 configurable string proxyURLPath = ?;
+configurable string basicAuthUN = ?;
+configurable string basicAuthPW = ?;
 
 public function main() {
     do {
-        http:Client proxyEndpoint = check new (proxyURL, secureSocket = {
+        http:Client proxyEndpoint = check new (proxyURL,
+        auth = {
+            username: basicAuthUN,
+            password: basicAuthPW
+        },
+        secureSocket = {
             enable: false
         });
 
