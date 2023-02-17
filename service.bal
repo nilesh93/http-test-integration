@@ -8,7 +8,7 @@ configurable string token = ?;
 public function main() {
     do {
         http:Client proxyEndpoint = check new (proxyURL,
-        
+        httpVersion = http:HTTP_1_1,
         secureSocket = {
             enable: false
         });
