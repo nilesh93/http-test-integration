@@ -37,5 +37,9 @@ service / on new http:Listener(9090) {
         json res = check callAPI();
         return res;
     }
+
+    resource function get hello() returns string|error {
+        return "hello from choreo";
+    }
 }
 
