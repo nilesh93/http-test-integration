@@ -7,20 +7,24 @@ configurable string token = ?;
 
 public function main() {
     do {
-        http:Client proxyEndpoint = check new (proxyURL,
-        httpVersion = http:HTTP_1_1,
-        secureSocket = {
-            enable: false
-        });
-
-        json res = check proxyEndpoint->get(proxyURLPath, {
-            "Authorization": "Basic " + token
-        });
-
+        json res = check callAPI();
         io:println("success invocation: ", res);
     } on fail var e {
         io:println("failed invocation: ", e);
     }
+}
+
+function callAPI() returns json|error {
+    http:Client proxyEndpoint = check new (proxyURL,
+        httpVersion = http:HTTP_1_1,
+        secureSocket = {
+        enable: false
+    });
+
+    json res = check proxyEndpoint->get(proxyURLPath, {
+        "Authorization": "Basic " + token
+    });
+    return res;
 }
 
 # A service representing a network-accessible API
@@ -30,8 +34,7 @@ service / on new http:Listener(9090) {
     # A resource for generating greetings
     # + return - string name with hello message or error
     resource function get test() returns json|error {
-        http:Client proxyEndpoint = check new (proxyURL);
-        json res = check proxyEndpoint->get(proxyURLPath);
+        json res = check callAPI();
         return res;
     }
 }
